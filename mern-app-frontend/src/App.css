@@ -34,8 +34,9 @@
   justify-content: center;
 }
 
-.contact-form div {
+.contact-form .contact-form-panel {
   margin-right: 20px;
   margin-left: 20px;
   text-align: right;
+  min-width: 224px;
 }
