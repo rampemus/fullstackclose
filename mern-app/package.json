@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/index.ts --scripts-prepend-node-path",
-    "watch": "nodemon",
+    "start:tsnode": "ts-node src/index.ts --scripts-prepend-node-path",
+    "start": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pasi Toivanen",
