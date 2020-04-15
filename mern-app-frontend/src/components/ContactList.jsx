@@ -32,17 +32,24 @@ const ContactList = (props) => {
             <th>Country</th>
             <th>Action</th>
           </tr>
+
           {contacts && contacts.length > 0 && contacts.map(contact =>
             <tr key={`${contact.id}row`}>
+
               {Object.entries(contact).map(valuepair => {
                 if (valuepair[0] === 'phone' || valuepair[0] === 'mobile') {
-                  return (<td key={`${contact.id}${valuepair[1]}`}>{valuepair[1].map(value => <div>{value}</div>)}</td>)
+                  return (<td key={`${contact.id}${valuepair[1]}`}>{valuepair[1].map((value, index) => 
+                    <div key={`${contact.id}${valuepair[1]}${index}`}>{value}</div>)}</td>
+                  )
                 }
                 return(<td key={`${contact.id}${valuepair[1]}`}>{valuepair[1]}</td>)
               })}
-              <td><button>Delete</button></td>
+
+              <td key={`${contact.id}delete`}><button>Delete</button></td>
+
             </tr>
           )}
+
         </tbody>
       </table>
     </div>

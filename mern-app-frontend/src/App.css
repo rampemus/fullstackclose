@@ -19,3 +19,23 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.contact-form {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.contact-form-flexbox {
+  display: flex;
+  flex: content;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.contact-form div {
+  margin-right: 20px;
+  margin-left: 20px;
+  text-align: right;
+}
