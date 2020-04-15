@@ -38,13 +38,16 @@ const ContactForm = (props) => {
             }).catch(error => {
               updateContacts()
               setSubmitting(false)
+              console.log('Contact modification failed', error)
             })
           } else {
             contactService.createContact(values).then(response => {
               setValues(initialValues)
+              updateContacts()
               setSubmitting(false)
             }).catch(error => {
               setSubmitting(false)
+              console.log('Contact creation failed', error)
             })
           }
         }}
@@ -54,7 +57,7 @@ const ContactForm = (props) => {
             {contact.id}
             <div className='contact-form-flexbox'>
               <div className='contact-form-panel'>
-                <p>Firstname: <Field type='text' name='firstname' value={values.firstname}/></p>
+                <p>Firstname: <Field type='text' name='firstname'/></p>
                 <p>Lastname: <Field type='text' name='lastname'/></p>
                 <p>Nickname: <Field type='text' name='nickname'/></p>
                 <p>Title: <Field type='text' name='title'/></p>
