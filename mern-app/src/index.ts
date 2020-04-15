@@ -66,11 +66,8 @@ interface IPostContactRequest extends Request {
 app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
     const body: INewContact = request.body
     console.log('got body ', body)
-    if (!body) {
-        return response.status(422)
-    }
-    if (
-        !body.firstname
+    if (!body
+        || !body.firstname
         || !body.lastname
         || !body.nickname
         || !body.title
@@ -113,8 +110,9 @@ app.put('/api/contact/', (request: IPutContactRequest, response: Response) => {
 })
 app.delete('/api/contact/:id', (request: Request, response: Response) => {
     let tempid = parseInt(request.params.id, 10)
-    database.splice(database.findIndex(contact => contact.id === tempid),1)
-    return response.status(422).json({ message: 'not found'})
+    const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid),1)
+    console.log('deleted succesfully', deletedContact)
+    return response.status(204).json({ message: 'not found'})
 })
 
 // listen for API calls
