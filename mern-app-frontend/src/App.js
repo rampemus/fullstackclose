@@ -1,14 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import ContactForm from './components/ContactForm'
+import ContactList from './components/ContactList'
+import './App.css'
 
 function App() {
   return (
     <div className="App">
-      App is here!
+      <ContactList />
       <ContactForm />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

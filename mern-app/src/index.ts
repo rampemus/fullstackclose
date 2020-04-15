@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 
@@ -45,6 +46,7 @@ console.log(`running database length ${database.length}`)
 let app = express()
 let port = process.env.PORT || 3001
 
+app.use(cors())
 app.use(bodyParser.json())
 
 // rest API
@@ -103,12 +105,13 @@ app.put('/api/contact/', (request: IPutContactRequest, response: Response) => {
     database.splice(database.findIndex(contact => contact.id === body.id),1,body)
     return response.status(200).json({ message: 'success !!'})
 })
-
 app.delete('/api/contact/:id', (request: Request, response: Response) => {
     let tempid = parseInt(request.params.id, 10)
     database.splice(database.findIndex(contact => contact.id === tempid),1)
     return response.status(422).json({ message: 'not found'})
 })
+
+// listen for API calls
 
 app.listen(port)
 console.log(`server is listening on ${port}`)
