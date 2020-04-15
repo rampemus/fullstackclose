@@ -17,8 +17,8 @@ const modifyContact = (contact) => {
 }
 
 const deleteContact = (contact) => {
-  const request = axios.put(`${baseUrl}/${contact.id}`)
+  const request = axios.delete(`${baseUrl}/${contact.id}`)
   return request.then(response => response.data)
 }
 
-export default { getAll }
+export default { getAll, createContact, modifyContact, deleteContact }
