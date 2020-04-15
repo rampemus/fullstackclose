@@ -1,6 +1,7 @@
 import React from 'react'
 import { Field, FieldArray } from 'formik'
 import { capitalizeFirstLetter } from '../utils/stringHelper'
+import { removeIndexFrom } from '../utils/arrayHelper'
 
 const ContactFieldArray = (props) => {
 
@@ -16,7 +17,7 @@ const ContactFieldArray = (props) => {
               <button key={`${name}${index}remove`}
                 onClick={(event) => {
                   event.preventDefault()
-                  setValues({ ...values, [name]: values[name].filter((value, i) => i !== index) })
+                  setValues({ ...values, [name]: removeIndexFrom(values[name], index) })
                 }}
               >
                 remove
