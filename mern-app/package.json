@@ -2,18 +2,35 @@
   "name": "contactapp",
   "version": "0.1.0",
   "description": "mern application",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node .",
+    "build": "tsc",
+    "start": "ts-node src/index.ts --scripts-prepend-node-path",
+    "watch": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pasi Toivanen",
   "license": "MIT",
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm run start --scripts-prepend-node-path",
+    "ext": "ts"
+  },
   "dependencies": {
     "express": "^4.17.1",
+    "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/express": "^4.17.6"
+    "@types/express": "^4.17.6",
+    "nodemon": "^2.0.3"
   }
 }

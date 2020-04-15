@@ -38,7 +38,7 @@ let database: IContact[] = [
     }
 ]
 
-console.log('running database:' + database)
+console.log(`running database length ${database.length}`)
 
 // initialization
 
@@ -58,10 +58,22 @@ interface IPostContactRequest extends Request {
 app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
     const body: INewContact = request.body
     console.log('got body ', body)
-    if(!body) {
+    if (!body) {
         return response.status(422)
     }
-    if(!body.firstname || !body.lastname) {
+    if (
+        !body.firstname
+        || !body.lastname
+        || !body.nickname
+        || !body.title
+        || !body.phone
+        || !body.mobile
+        || !body.email
+        || !body.street
+        || !body.postcode
+        || !body.city
+        || !body.country
+    ) {
         return response.status(422).json({ message: 'provide required data' })
     }
     const contact: IContact = {
