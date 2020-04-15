@@ -1,9 +1,10 @@
 import express from 'express'
+import { Request, Response } from 'express'
 import bodyParser from 'body-parser'
 
 // database
 type List = String[]
-interface IContact {
+interface INewContact {
     firstname: String,
     lastname: String,
     nickname: String,
@@ -15,10 +16,27 @@ interface IContact {
     postcode: String,
     city: String,
     country: String,
+}
+interface IContact extends INewContact {
     id: Number
 }
-let database: IContact[] = []
 let id = 100
+let database: IContact[] = [
+    {
+        id: id++,
+        firstname: 'Pasi',
+        lastname: 'Toivanen',
+        nickname: 'rampe',
+        title: 'Minä',
+        phone: ['010 000 0000'],
+        mobile: ['045 000 0000'],
+        email: ['somebody@email.com'],
+        street: 'Testaajankatu 1',
+        postcode: '00100',
+        city: 'Helsinki',
+        country: 'Suomi'
+    }
+]
 
 console.log('running database:' + database)
 
@@ -31,12 +49,14 @@ app.use(bodyParser.json())
 
 // rest API
 
-app.get('/api/contact', (request, response) => {
+app.get('/api/contact', (request: Request, response: Response) => {
     return response.status(200).json(database)
 })
-
-app.post('/api/contact', (request, response) => {
-    const body: IContact = request.body
+interface IPostContactRequest extends Request {
+    body: INewContact
+}
+app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
+    const body: INewContact = request.body
     console.log('got body ', body)
     if(!body) {
         return response.status(422)
@@ -61,6 +81,21 @@ app.post('/api/contact', (request, response) => {
     database.push(contact)
     console.log(database)
     return response.status(200).json({ message: 'success !!' })
+})
+
+interface IPutContactRequest extends Request {
+    body: IContact
+}
+app.put('/api/contact/', (request: IPutContactRequest, response: Response) => {
+    const body: IContact = request.body
+    database.splice(database.findIndex(contact => contact.id === body.id),1,body)
+    return response.status(200).json({ message: 'success !!'})
+})
+
+app.delete('/api/contact/:id', (request: Request, response: Response) => {
+    let tempid = parseInt(request.params.id, 10)
+    database.splice(database.findIndex(contact => contact.id === tempid),1)
+    return response.status(422).json({ message: 'not found'})
 })
 
 app.listen(port)
