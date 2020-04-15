@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ContactListRow from './ContactListRow'
 import contactService from '../services/contact'
+import { capitalizeFirstLetter } from '../utils/stringHelper'
 
 const ContactList = (props) => {
 
@@ -19,21 +20,12 @@ const ContactList = (props) => {
       <table className='contact-list-table'>
         <tbody>
           <tr>
-            <th>Id</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Nickname</th>
-            <th>Title</th>
-            <th>Phone</th>
-            <th>Mobile</th>
-            <th>Email</th>
-            <th>Street</th>
-            <th>Postcode</th>
-            <th>City</th>
-            <th>Country</th>
+            {contacts && contacts[0] && Object.entries(contacts[0]).map(entry => entry[0]).map(value => 
+              <th key={`key${value}`}>{capitalizeFirstLetter(value)}</th>
+            )}
             <th>Action</th>
           </tr>
-          {contacts && contacts.length > 0 && contacts.map(contact =>
+          {contacts && contacts.map(contact =>
             <ContactListRow key={contact.id} contact={contact} />
           )}
         </tbody>
