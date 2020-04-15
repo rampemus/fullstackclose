@@ -29,8 +29,14 @@ let database: IContact[] = [
         lastname: 'Toivanen',
         nickname: 'rampe',
         title: 'Minä',
-        phone: ['010 000 0000'],
-        mobile: ['045 000 0000'],
+        phone: [
+            '010 000 0000',
+            '020 000 0000'
+        ],
+        mobile: [
+            '045 000 0000',
+            '044 000 0000'
+        ],
         email: ['somebody@email.com'],
         street: 'Testaajankatu 1',
         postcode: '00100',

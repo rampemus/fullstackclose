@@ -4,31 +4,10 @@ import { Formik, Field, Form, FieldArray } from 'formik'
 
 const ContactForm = (props) => {
 
-  const initialValues = {
-      firstname: '',
-      lastname: '',
-      nickname: '',
-      title: 'title',
-      phone: [
-        ''
-      ],
-      mobile: [
-        ''
-      ],
-      email: [
-        ''
-      ],
-      street: '',
-      postcode: '',
-      city: '',
-      country: ''
-    }
-
   return(
     <div>
       <h1>Contact form</h1>
       <Formik
-        initialValues={initialValues}
         onSubmit={(values, { setSubmitting })=>{
           console.log('Sending values', values)
           setSubmitting(false)
@@ -47,7 +26,7 @@ const ContactForm = (props) => {
             <p>Postcode: <Field type='text' name='postcode'></Field></p >
             <p>City: <Field type='text' name='city'></Field></p >
             <p>Country: <Field type='text' name='country'></Field></p >
-            <button type='submit' disabled={isSubmitting}>save</button>
+            <p> <button type='submit' disabled={isSubmitting}>save</button> </p>
           </Form>
         )}
       </Formik>
