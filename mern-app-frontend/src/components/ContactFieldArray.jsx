@@ -13,12 +13,20 @@ const ContactFieldArray = (props) => {
           {values[name].map((value, index) =>
             <p key={`${name}${index}`}>
               {capitalizeFirstLetter(name)} {index + 1}: <Field type='text' name={`${name}.${index}`} />
-              <button key={`${name}${index}remove`} onClick={() => setValues({ ...values, [name]: values[name].filter((value, i) => i !== index) })} >
+              <button key={`${name}${index}remove`}
+                onClick={(event) => {
+                  event.preventDefault()
+                  setValues({ ...values, [name]: values[name].filter((value, i) => i !== index) })
+                }}
+              >
                 remove
               </button>
             </p>
           )}
-          <p><button onClick={() => setValues({ ...values, [name]: values[name].concat('') })}>add {name}</button></p>
+          <p><button onClick={(event) => {
+              event.preventDefault()
+              setValues({ ...values, [name]: values[name].concat('') })}
+            }>add {name}</button></p>
         </div>
       )}
     />

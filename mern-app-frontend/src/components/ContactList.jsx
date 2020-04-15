@@ -7,6 +7,7 @@ import { capitalizeFirstLetter } from '../utils/stringHelper'
 const ContactList = (props) => {
 
   const [contacts, setContacts] = useState([])
+  const [selectedContact, setSelectedContact] = useState(null)
 
   useEffect(()=>{
     updateContacts()
@@ -15,7 +16,6 @@ const ContactList = (props) => {
   const updateContacts = () => {
     contactService.getAll().then(response => {
       setContacts(response)
-      console.log('Data recieved', response)
     })
   }
 
@@ -31,11 +31,20 @@ const ContactList = (props) => {
             {contacts && contacts[0] ? <th>Action</th> : <th>Empty</th>}
           </tr>
           {contacts && contacts.map(contact =>
-            <ContactListRow key={contact.id} contact={contact} updateContacts={updateContacts}/>
+            <ContactListRow
+              key={contact.id}
+              contact={contact}
+              updateContacts={updateContacts}
+              handleSelect={setSelectedContact}
+            />
           )}
         </tbody>
       </table>
-      <ContactForm />
+      <ContactForm
+        initialValues={selectedContact}
+        updateContacts={updateContacts}
+        handleCancel={() => setSelectedContact(null)}
+      />
     </div>
   )
 }

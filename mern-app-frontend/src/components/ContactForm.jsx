@@ -2,8 +2,11 @@ import React from 'react'
 import { Formik, Field, Form } from 'formik'
 import ContactFieldArray from './ContactFieldArray'
 import contactService from '../services/contact'
+import contact from '../services/contact'
 
 const ContactForm = (props) => {
+  
+  const { updateContacts, handleCancel } = props
 
   const initialValues = props.initialValues || {
     firstname: '',
@@ -21,24 +24,34 @@ const ContactForm = (props) => {
 
   return(
     <div className='contact-form'>
-      <h2>Contact form</h2>
+      <h2>Contact form {initialValues.id ? `(#${initialValues.id})` : ''}</h2>
       <Formik
         initialValues={initialValues}
         enableReinitialize
-        onSubmit={(values, { setSubmitting }, setValues)=>{
-          console.log('Sending values', values)
-          contactService.createContact(values).then(response => {
-            console.log('contact added', response)
-            setValues(initialValues)
-            setSubmitting(false)
-          }).catch(error => {
-            console.log('error while adding contact', error)
-            setSubmitting(false)
-          })
+        onSubmit={(values, { setSubmitting, setValues })=>{
+          setSubmitting(true)
+          if (initialValues.id) {
+            contactService.modifyContact({ ...values, id: initialValues.id }).then(response => {
+              handleCancel()
+              updateContacts()
+              setSubmitting(false)
+            }).catch(error => {
+              updateContacts()
+              setSubmitting(false)
+            })
+          } else {
+            contactService.createContact(values).then(response => {
+              setValues(initialValues)
+              setSubmitting(false)
+            }).catch(error => {
+              setSubmitting(false)
+            })
+          }
         }}
       >
         {({ isSubmitting, values, setValues }) => (
           <Form>
+            {contact.id}
             <div className='contact-form-flexbox'>
               <div className='contact-form-panel'>
                 <p>Firstname: <Field type='text' name='firstname' value={values.firstname}/></p>
@@ -58,7 +71,10 @@ const ContactForm = (props) => {
                 <p>Country: <Field type='text' name='country'/></p>
               </div>
             </div>
-            <p> <button type='submit' disabled={isSubmitting}>save</button> </p>
+            <p>
+              <button type='submit' disabled={isSubmitting}>Save</button> 
+              <button onClick={() => handleCancel()} disabled={!initialValues.id}>Cancel</button>
+            </p>
           </Form>
         )}
       </Formik>

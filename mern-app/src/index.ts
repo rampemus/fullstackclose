@@ -45,8 +45,6 @@ let database: IContact[] = [
     }
 ]
 
-console.log(`running database length ${database.length}`)
-
 // initialization
 
 let app = express()
@@ -65,7 +63,6 @@ interface IPostContactRequest extends Request {
 }
 app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
     const body: INewContact = request.body
-    console.log('got body ', body)
     if (!body
         || !body.firstname
         || !body.lastname
@@ -96,7 +93,6 @@ app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
         country: body.country,
     }
     database.push(contact)
-    console.log(database)
     return response.status(200).json({ message: 'success !!' })
 })
 
@@ -111,7 +107,6 @@ app.put('/api/contact/', (request: IPutContactRequest, response: Response) => {
 app.delete('/api/contact/:id', (request: Request, response: Response) => {
     let tempid = parseInt(request.params.id, 10)
     const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid),1)
-    console.log('deleted succesfully', deletedContact)
     return response.status(204).json({ message: 'not found'})
 })
 
