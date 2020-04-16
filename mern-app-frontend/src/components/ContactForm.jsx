@@ -32,18 +32,18 @@ const ContactForm = (props) => {
           setSubmitting(true)
           if (initialValues.id) {
             contactService.modifyContact({ ...values, id: initialValues.id }).then(response => {
-              handleCancel()
-              updateContacts()
+              handleCancel && handleCancel()
+              updateContacts && updateContacts()
               setSubmitting(false)
             }).catch(error => {
-              updateContacts()
+              updateContacts && updateContacts()
               setSubmitting(false)
               console.log('Contact modification failed', error)
             })
           } else {
             contactService.createContact(values).then(response => {
               setValues(initialValues)
-              updateContacts()
+              updateContacts && updateContacts()
               setSubmitting(false)
             }).catch(error => {
               setSubmitting(false)
@@ -76,7 +76,9 @@ const ContactForm = (props) => {
             </div>
             <p>
               <button type='submit' disabled={isSubmitting}>Save</button> 
-              <button onClick={() => handleCancel()} disabled={!initialValues.id}>Cancel</button>
+              <button onClick={() => {
+                handleCancel && handleCancel()
+              }} disabled={!initialValues.id}>Cancel</button>
             </p>
           </Form>
         )}
