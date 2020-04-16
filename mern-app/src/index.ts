@@ -1,4 +1,5 @@
 import express from 'express'
+
 import cors from 'cors'
 import { Request, Response } from 'express'
 import contactRouter from './controllers/contactRouter'
@@ -6,8 +7,8 @@ import bodyParser from 'body-parser'
 
 // initialization
 
-let app = express()
-let port = process.env.PORT || 3001
+const app = express()
+const port = process.env.PORT || 3001
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -15,22 +16,22 @@ app.use(bodyParser.json())
 // USER MANAGEMENT
 
 interface IUser {
-  username: String,
-  password: String
+  username: string,
+  password: string
 }
 interface ISession {
-  username: String,
-  ttl: Number,
-  token: String
+  username: string,
+  ttl: number,
+  token: string
 }
 interface IRegister {
-  username: String,
-  password: String
+  username: string,
+  password: string
 }
 interface IRegisterRequest extends Request {
   body: IRegister
 }
-let registeredUsers: IUser[] = []
+const registeredUsers: IUser[] = []
 
 app.post("/register", (request: IRegisterRequest, response: Response) => {
   const body = request.body
@@ -49,16 +50,16 @@ app.post("/register", (request: IRegisterRequest, response: Response) => {
   }
   const newUser = body
   registeredUsers.push(newUser)
-  console.log(registeredUsers)
+
   return response.status(200).json({ message: 'success !!'})
 })
 
 app.post("/login",(request: Request, response: Response) => {
-  
+  return response.status(422).json({ message: 'Not ready'})
 })
 
 app.post("/logout",(request: Request, response: Response) => {
-  
+  return response.status(422).json({ message: 'Not ready'})
 })
 // rest API
 
