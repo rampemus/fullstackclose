@@ -1,49 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import { Request, Response } from 'express'
+import contactRouter from './controllers/contactRouter'
 import bodyParser from 'body-parser'
-
-// database
-type List = String[]
-interface INewContact {
-  firstname: String,
-  lastname: String,
-  nickname: String,
-  title: String,
-  phone: List,
-  mobile: List,
-  email: List,
-  street: String,
-  postcode: String,
-  city: String,
-  country: String,
-}
-interface IContact extends INewContact {
-  id: Number
-}
-let id = 100
-let database: IContact[] = [
-  {
-    id: id++,
-    firstname: 'Pasi',
-    lastname: 'Toivanen',
-    nickname: 'rampe',
-    title: 'Minä',
-    phone: [
-      '010 000 0000',
-      '020 000 0000'
-    ],
-    mobile: [
-      '045 000 0000',
-      '044 000 0000'
-    ],
-    email: ['somebody@email.com'],
-    street: 'Testaajankatu 1',
-    postcode: '00100',
-    city: 'Helsinki',
-    country: 'Suomi'
-  }
-]
 
 // initialization
 
@@ -53,62 +12,57 @@ let port = process.env.PORT || 3001
 app.use(cors())
 app.use(bodyParser.json())
 
-// rest API
+// USER MANAGEMENT
 
-app.get('/api/contact', (request: Request, response: Response) => {
-  return response.status(200).json(database)
-})
-interface IPostContactRequest extends Request {
-  body: INewContact
+interface IUser {
+  username: String,
+  password: String
 }
-app.post('/api/contact', (request: IPostContactRequest, response: Response) => {
-  const body: INewContact = request.body
-  if (!body
-    || !body.firstname
-    || !body.lastname
-    || !body.nickname
-    || !body.title
-    || !body.phone
-    || !body.mobile
-    || !body.email
-    || !body.street
-    || !body.postcode
-    || !body.city
-    || !body.country
-  ) {
-    return response.status(422).json({ message: 'provide required data' })
-  }
-  const contact: IContact = {
-    id: id++,
-    firstname: body.firstname,
-    lastname: body.lastname,
-    nickname: body.nickname,
-    title: body.title,
-    phone: body.phone,
-    mobile: body.mobile,
-    email: body.email,
-    street: body.street,
-    postcode: body.postcode,
-    city: body.city,
-    country: body.country,
-  }
-  database.push(contact)
-  return response.status(200).json({ message: 'success !!' })
-})
+interface ISession {
+  username: String,
+  ttl: Number,
+  token: String
+}
+interface IRegister {
+  username: String,
+  password: String
+}
+interface IRegisterRequest extends Request {
+  body: IRegister
+}
+let registeredUsers: IUser[] = []
 
-interface IPutContactRequest extends Request {
-  body: IContact
-}
-app.put('/api/contact/', (request: IPutContactRequest, response: Response) => {
-  const body: IContact = request.body
-  database.splice(database.findIndex(contact => contact.id === body.id),1,body)
+app.post("/register", (request: IRegisterRequest, response: Response) => {
+  const body = request.body
+  if (!body) {
+    return response.status(422).json({ message: 'Credentials missing 1'})
+  }
+  if (!body.username || !body.password) {
+    return response.status(422).json({ message: 'Cedentials missing 2'})
+  }
+  if ((body.username.length < 4 ) || (body.password.length < 8)) {
+    return response.status(422).json({ message: 'Credentials missing 3'})
+  }
+  const existingUser = registeredUsers.find(user => user.username === body.username)
+  if (existingUser) {
+    return response.status(422).json({ message: 'Credentials missing 4' })
+  }
+  const newUser = body
+  registeredUsers.push(newUser)
+  console.log(registeredUsers)
   return response.status(200).json({ message: 'success !!'})
 })
-app.delete('/api/contact/:id', (request: Request, response: Response) => {
-  let tempid = parseInt(request.params.id, 10)
-  const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid),1)
-  return response.status(204).json({ message: 'not found'})
+
+app.post("/login",(request: Request, response: Response) => {
+  
 })
+
+app.post("/logout",(request: Request, response: Response) => {
+  
+})
+// rest API
+
+app.use('/api', contactRouter)
 
 // listen for API calls
 
