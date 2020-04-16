@@ -1,9 +1,9 @@
 import express from 'express'
-
 import cors from 'cors'
 import { Request, Response } from 'express'
 import contactRouter from './controllers/contactRouter'
 import bodyParser from 'body-parser'
+import { createToken } from './utils/createToken'
 
 // initialization
 
@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 
 // USER MANAGEMENT
 
-interface IUser {
+interface IUsernamePasswordPair {
   username: string,
   password: string
 }
@@ -24,25 +24,17 @@ interface ISession {
   ttl: number,
   token: string
 }
-interface IRegister {
-  username: string,
-  password: string
-}
 interface IRegisterRequest extends Request {
-  body: IRegister
+  body: IUsernamePasswordPair
 }
-const registeredUsers: IUser[] = []
+const registeredUsers: IUsernamePasswordPair[] = []
+const loggedSessions: ISession[] = []
+const timeToLiveDiff = 1000*60*60
 
 app.post('/register', (request: IRegisterRequest, response: Response) => {
   const body = request.body
-  if (!body) {
+  if (!body || !body.username || !body.password) {
     return response.status(422).json({ message: 'Credentials missing 1'})
-  }
-  if (!body.username || !body.password) {
-    return response.status(422).json({ message: 'Cedentials missing 2'})
-  }
-  if ((body.username.length < 4 ) || (body.password.length < 8)) {
-    return response.status(422).json({ message: 'Credentials missing 3'})
   }
   const existingUser = registeredUsers.find(user => user.username === body.username)
   if (existingUser) {
@@ -50,17 +42,64 @@ app.post('/register', (request: IRegisterRequest, response: Response) => {
   }
   const newUser = body
   registeredUsers.push(newUser)
-
+  console.log(newUser)
   return response.status(200).json({ message: 'success !!'})
 })
 
-app.post('/login',(request: Request, response: Response) => {
-  return response.status(422).json({ message: 'Not ready'})
+interface ILoginRequest extends Request {
+  body: IUsernamePasswordPair
+}
+app.post('/login',(request: ILoginRequest, response: Response) => {
+  const body = request.body
+  if (!body || !body.username || !body.password) {
+    return response.status(422).json({ message: 'Credentials missing'})
+  }
+  const user = registeredUsers.find(registeredUser =>
+    registeredUser.username === body.username && registeredUser.password === body.password)
+  if (!user) {
+    return response.status(422).json({ message: 'Credentials missing'})
+  }
+  const token = createToken()
+  const newSession: ISession = {
+    username: body.username,
+    ttl: new Date().getTime() + timeToLiveDiff,
+    token
+  }
+  loggedSessions.push(newSession)
+  console.log(loggedSessions)
+  return response.status(200).json({ token })
 })
 
+const isUserLogged = (request: any, response: Response, next: () => void) => {
+  const token = request.headers.token
+  if(!token) {
+    return response.status(403).json({ message: 'forbidden' })
+  }
+  const loggedSession = loggedSessions.find( session => session.token === token )
+  if (!loggedSession) {
+    return response.status(403).json({ message: 'forbidden'})
+  }
+  const dateNow = new Date().getTime()
+  loggedSession.ttl = dateNow + timeToLiveDiff
+  request.session = {}
+  request.session.username = loggedSession.username
+  return next()
+}
+app.use(isUserLogged)
+
 app.post('/logout',(request: Request, response: Response) => {
-  return response.status(422).json({ message: 'Not ready'})
+  const token = request.headers.token
+  if (!token) {
+    return response.status(409).json({ message: 'Conflict' })
+  }
+  const sessionIndex = loggedSessions.findIndex(session => session.token === token)
+  if(sessionIndex < 0) {
+    return response.status(404).json({ message: 'Not found' })
+  }
+  loggedSessions.splice(sessionIndex, 1)
+  return response.status(422).json({ message: 'Success !!'})
 })
+
 // rest API
 
 app.use('/api', contactRouter)
