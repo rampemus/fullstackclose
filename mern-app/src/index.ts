@@ -33,7 +33,7 @@ interface IRegisterRequest extends Request {
 }
 const registeredUsers: IUser[] = []
 
-app.post("/register", (request: IRegisterRequest, response: Response) => {
+app.post('/register', (request: IRegisterRequest, response: Response) => {
   const body = request.body
   if (!body) {
     return response.status(422).json({ message: 'Credentials missing 1'})
@@ -54,11 +54,11 @@ app.post("/register", (request: IRegisterRequest, response: Response) => {
   return response.status(200).json({ message: 'success !!'})
 })
 
-app.post("/login",(request: Request, response: Response) => {
+app.post('/login',(request: Request, response: Response) => {
   return response.status(422).json({ message: 'Not ready'})
 })
 
-app.post("/logout",(request: Request, response: Response) => {
+app.post('/logout',(request: Request, response: Response) => {
   return response.status(422).json({ message: 'Not ready'})
 })
 // rest API
