@@ -1,25 +1,25 @@
 import { Router, Request, Response } from 'express'
 
 // database
-type List = String[]
+type List = string[]
 interface INewContact {
-  firstname: String,
-  lastname: String,
-  nickname: String,
-  title: String,
+  firstname: string,
+  lastname: string,
+  nickname: string,
+  title: string,
   phone: List,
   mobile: List,
   email: List,
-  street: String,
-  postcode: String,
-  city: String,
-  country: String,
+  street: string,
+  postcode: string,
+  city: string,
+  country: string,
 }
 interface IContact extends INewContact {
-  id: Number
+  id: number
 }
 let id = 100
-let database: IContact[] = [
+const database: IContact[] = [
   {
     id: id++,
     firstname: 'Pasi',
@@ -94,7 +94,7 @@ contactRouter.put('/contact/', (request: IPutContactRequest, response: Response)
   return response.status(200).json({ message: 'success !!'})
 })
 contactRouter.delete('/contact/:id', (request: Request, response: Response) => {
-  let tempid = parseInt(request.params.id, 10)
+  const tempid = parseInt(request.params.id, 10)
   const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid),1)
   return response.status(204).json({ message: 'not found'})
 })
