@@ -24,7 +24,7 @@ const database: IContact[] = [
     id: id++,
     firstname: 'Pasi',
     lastname: 'Toivanen',
-    nickname: 'rampe',
+    nickname: 'asdf',
     title: 'Minä',
     phone: [
       '010 000 0000',

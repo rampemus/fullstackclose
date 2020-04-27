@@ -1,23 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import ContactForm from './ContactForm'
+import React from 'react'
 import ContactListRow from './ContactListRow'
-import contactService from '../services/contact'
 import { capitalizeFirstLetter } from '../utils/stringHelper'
 
 const ContactList = (props) => {
 
-  const [contacts, setContacts] = useState([])
-  const [selectedContact, setSelectedContact] = useState(null)
-
-  useEffect(()=>{
-    updateContacts()
-  },[])
-
-  const updateContacts = () => {
-    contactService.getAll().then(response => {
-      setContacts(response)
-    })
-  }
+  const { contacts, updateContacts, setSelectedContact } = props
 
   return(
     <div>
@@ -25,8 +12,12 @@ const ContactList = (props) => {
       <table className='contact-list-table'>
         <tbody>
           <tr>
-            {contacts && contacts[0] && Object.entries(contacts[0]).map(entry => entry[0]).map(value => 
-              <th key={`key${value}`}>{capitalizeFirstLetter(value)}</th>
+            {contacts
+              && contacts[0] 
+              && Object.entries(contacts[0]).map(entry => entry[0]).map(value => 
+                <th key={`key${value}`}>
+                  {capitalizeFirstLetter(value)}
+                </th>
             )}
             {contacts && contacts[0] ? <th>Action</th> : <th>Empty</th>}
           </tr>
@@ -40,11 +31,6 @@ const ContactList = (props) => {
           )}
         </tbody>
       </table>
-      <ContactForm
-        initialValues={selectedContact}
-        updateContacts={updateContacts}
-        handleCancel={() => setSelectedContact(null)}
-      />
     </div>
   )
 }

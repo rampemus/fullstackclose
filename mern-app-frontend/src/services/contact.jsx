@@ -1,8 +1,14 @@
 import axios from 'axios'
 const baseUrl = '/api/contact'
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
+const getAll = (token) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'token': token ? token.toString() : ''
+    }
+  }
+  const request = axios.get(baseUrl, config )
   return request.then(response => response.data)
 }
 

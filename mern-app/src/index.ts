@@ -13,6 +13,8 @@ const port = process.env.PORT || 3001
 app.use(cors())
 app.use(bodyParser.json())
 
+
+
 // USER MANAGEMENT
 
 interface IUsernamePasswordPair {
@@ -42,7 +44,6 @@ app.post('/register', (request: IRegisterRequest, response: Response) => {
   }
   const newUser = body
   registeredUsers.push(newUser)
-  console.log(newUser)
   return response.status(200).json({ message: 'success !!'})
 })
 
@@ -66,11 +67,10 @@ app.post('/login',(request: ILoginRequest, response: Response) => {
     token
   }
   loggedSessions.push(newSession)
-  console.log(loggedSessions)
   return response.status(200).json({ token })
 })
 
-const isUserLogged = (request: any, response: Response, next: () => void) => {
+const isUserLogged = (request: any, response: Response, next: ()=>void) => {
   const token = request.headers.token
   if(!token) {
     return response.status(403).json({ message: 'forbidden' })
@@ -101,6 +101,12 @@ app.post('/logout',(request: Request, response: Response) => {
 })
 
 // rest API
+
+app.use((request: IRegisterRequest, response: Response, next: () => void) => {
+  console.log('Method:', request.method)
+  console.log('Headers:', request.headers)
+  next()
+})
 
 app.use('/api', contactRouter)
 

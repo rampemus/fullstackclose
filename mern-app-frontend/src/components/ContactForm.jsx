@@ -38,7 +38,6 @@ const ContactForm = (props) => {
             }).catch(error => {
               updateContacts && updateContacts()
               setSubmitting(false)
-              console.log('Contact modification failed', error)
             })
           } else {
             contactService.createContact(values).then(response => {
