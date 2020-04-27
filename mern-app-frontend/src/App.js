@@ -12,7 +12,8 @@ function App() {
   const [token, setToken] = useState(null)
 
   useEffect(()=>{
-    updateContacts()
+    token && updateContacts()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[token])
 
   const updateContacts = () => {
