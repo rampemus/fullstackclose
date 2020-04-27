@@ -5,6 +5,12 @@
 		},
 		{
 			"path": "../../../NodeProjects/cvapp"
+		},
+		{
+			"path": "../../Fullstackuusimaa2020-1"
+		},
+		{
+			"path": "../../../NodeProjects/cvapp/frontend"
 		}
 	],
 	"settings": {}
