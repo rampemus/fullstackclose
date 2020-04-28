@@ -1,0 +1,21 @@
+{
+  "name": "mongo",
+  "version": "1.0.0",
+  "description": "Node program to access mongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon start",
+    "start": "node index.js --no-warnings"
+  },
+  "type": "module",
+  "author": "rampemus",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.3"
+  }
+}
