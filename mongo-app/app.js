@@ -1,8 +1,8 @@
 import express from 'express'
 import coolRouter from './controllers/cool.js'
 
-const App = express()
+const app = express()
 
-App.use('/api', coolRouter)
+app.use('/api', coolRouter)
 
-export default App
+export default app

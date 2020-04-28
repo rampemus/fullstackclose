@@ -1,13 +1,13 @@
 import coolRouter from './controllers/cool.js'
 import mongoose from 'mongoose'
-import App from './app.js'
+import app from './app.js'
 
 const port = process.env.PORT || 3000
 
-mongoose.connect('mongodb://localhost',{
+mongoose.connect('mongodb://localhost:27017/testdb',{
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
 
-App.listen(port)
+app.listen(port)
 console.log('App listening to port ' + port)
