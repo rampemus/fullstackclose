@@ -16,12 +16,12 @@ interface INewContact {
   country: string,
 }
 interface IContact extends INewContact {
-  id: number
+  id: string
 }
 let id = 100
 const database: IContact[] = [
   {
-    id: id++,
+    id: `${id++}`,
     firstname: 'Pasi',
     lastname: 'Toivanen',
     nickname: 'asdf',
@@ -68,7 +68,7 @@ contactRouter.post('/contact', (request: IPostContactRequest, response: Response
     return response.status(422).json({ message: 'provide required data' })
   }
   const contact: IContact = {
-    id: id++,
+    id: `${id++}`,
     firstname: body.firstname,
     lastname: body.lastname,
     nickname: body.nickname,
@@ -94,7 +94,7 @@ contactRouter.put('/contact/', (request: IPutContactRequest, response: Response)
   return response.status(200).json({ message: 'success !!'})
 })
 contactRouter.delete('/contact/:id', (request: Request, response: Response) => {
-  const tempid = parseInt(request.params.id, 10)
+  const tempid = request.params.id
   const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid),1)
   return response.status(204).json({ message: 'not found'})
 })
