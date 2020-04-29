@@ -23,14 +23,14 @@ const ContactForm = (props) => {
 
   return(
     <div className='contact-form'>
-      <h2>Contact form {initialValues.id ? `(#${initialValues.id})` : ''}</h2>
+      <h2>Contact form {initialValues._id ? `(#${initialValues._id})` : ''}</h2>
       <Formik
         initialValues={initialValues}
         enableReinitialize
         onSubmit={(values, { setSubmitting, setValues })=>{
           setSubmitting(true)
-          if (initialValues.id) {
-            contactService.modifyContact({ ...values, id: initialValues.id, token }).then(response => {
+          if (initialValues._id) {
+            contactService.modifyContact({ ...values, token }).then(response => {
               handleCancel && handleCancel()
               updateContacts && updateContacts()
               setSubmitting(false)

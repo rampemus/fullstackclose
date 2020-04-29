@@ -17,6 +17,12 @@ const ContactSchema = new Schema({
     country: String
 })
 
+ContactSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.__v
+    }
+})
+
 const Contact = mongoose.model('Contact', ContactSchema)
 
 export default Contact

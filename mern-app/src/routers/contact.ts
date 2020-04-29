@@ -5,7 +5,7 @@ const contactRouter = Router()
 
 contactRouter.get('/contact', contactGet)
 contactRouter.post('/contact', contactPost)
-contactRouter.put('/contact/', contactPut)
+contactRouter.put('/contact/:id', contactPut)
 contactRouter.delete('/contact/:id', contactDelete)
 
 export default contactRouter

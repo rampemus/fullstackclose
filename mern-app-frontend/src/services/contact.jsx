@@ -4,7 +4,7 @@ const baseUrl = '/api/contact'
 const config = (token) => {
   return { headers: {
     'Content-Type': 'application/json',
-    'token': token ? token.toString() : ''
+    'token': token.toString()
   }}
 }
 
@@ -19,12 +19,12 @@ const createContact = (contact, token) => {
 }
 
 const modifyContact = (contact, token) => {
-  const request = axios.put(baseUrl, contact, config(token))
+  const request = axios.put(`${baseUrl}/${contact._id}`, contact, config(token))
   return request.then(response => response.data)
 }
 
 const deleteContact = (contact, token) => {
-  const request = axios.delete(`${baseUrl}/${contact.id}`, config(token))
+  const request = axios.delete(`${baseUrl}/${contact._id}`, config(token))
   return request.then(response => response.data)
 }
 

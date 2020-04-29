@@ -75,6 +75,14 @@ app.post('/login',(request: ILoginRequest, response: Response) => {
   return response.status(200).json({ token })
 })
 
+app.use((request: IRegisterRequest, response: Response, next: () => void) => {
+  console.log('Method:', request.method)
+  console.log('Content-Type: ', request.headers)
+  console.log('Token: ', request.headers.token)
+  console.log('Body: ', request.body)
+  next()
+})
+
 const isUserLogged = (request: any, response: Response, next: ()=>void) => {
   const token = request.headers.token
   if(!token) {
@@ -106,12 +114,6 @@ app.post('/logout',(request: Request, response: Response) => {
 })
 
 // rest API
-
-app.use((request: IRegisterRequest, response: Response, next: () => void) => {
-  console.log('Method:', request.method)
-  console.log('Headers:', request.headers)
-  next()
-})
 
 app.use('/api', contactRouter)
 
