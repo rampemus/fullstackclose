@@ -6,7 +6,8 @@ const port = process.env.PORT || 3000
 
 mongoose.connect('mongodb://localhost:27017/testdb',{
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 })
 
 app.listen(port)

@@ -1,13 +1,15 @@
 import express from 'express'
 import coolRouter from './controllers/cool.js'
-import { getContact } from './controllers/contactController.js'
 import bodyparser from 'body-parser'
+import contactRouter from './routes/contact.js'
 
 const app = express()
 
 app.use(bodyparser.json())
 
 app.use('/api', coolRouter)
-app.use('/contact', getContact)
+
+app.use('/contact', contactRouter)
+
 
 export default app
