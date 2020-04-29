@@ -1,25 +1,24 @@
-var BookInstance = require('../models/bookinstance')
-var Book = require('../models/book')
-var async = require('async')
+import BookInstance from '../models/bookinstance.js'
+import Book from '../models/book.js'
+import async from 'async'
 
-const { body,validationResult } = require('express-validator/check')
-const { sanitizeBody } = require('express-validator/filter')
+// const { body,validationResult } = require('express-validator/check')
+// const { sanitizeBody } = require('express-validator/filter')
 
 // Display list of all BookInstances.
-exports.bookInstanceList = function(req, res, next) {
+export const bookInstanceList = function(req, res, next) {
 
   BookInstance.find()
     .populate('book')
     .exec(function (err, listBookInstances) {
       if (err) { return next(err) }
-      // Successful, so render.
-      res.render('bookInstanceList', { title: 'Book Instance List', bookInstanceList:  listBookInstances})
+      res.status(200).json({ title: 'Book Instance List', bookInstanceList:  listBookInstances})
     })
 
 }
 
 // Display detail page for a specific BookInstance.
-exports.bookinstanceDetail = function(req, res, next) {
+export const bookinstanceDetail = function(req, res, next) {
 
     BookInstance.findById(req.params.id)
     .populate('book')
@@ -30,37 +29,35 @@ exports.bookinstanceDetail = function(req, res, next) {
           err.status = 404
           return next(err)
         }
-      // Successful, so render.
-      res.render('bookinstanceDetail', { title: 'Book:', bookinstance:  bookinstance})
+      res.status(200).json({ title: 'Book:', bookinstance:  bookinstance})
     })
 
 }
 
 // Display BookInstance create form on GET.
-exports.bookinstanceCreateGet = function(req, res, next) {
+export const bookinstanceCreateGet = function(req, res, next) {
 
      Book.find({},'title')
     .exec(function (err, books) {
       if (err) { return next(err) }
-      // Successful, so render.
-      res.render('bookinstanceForm', {title: 'Create BookInstance', bookList:books } )
+      res.status(200).json({title: 'Create BookInstance', bookList:books } )
     })
 
 }
 
 // Handle BookInstance create on POST.
-exports.bookinstanceCreatePost = [
+export const bookinstanceCreatePost = [
 
     // Validate fields.
-    body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
-    body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
-    body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
+    // body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
+    // body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
+    // body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
     
     // Sanitize fields.
-    sanitizeBody('book').escape(),
-    sanitizeBody('imprint').escape(),
-    sanitizeBody('status').escape(),
-    sanitizeBody('dueBack').toDate(),
+    // sanitizeBody('book').escape(),
+    // sanitizeBody('imprint').escape(),
+    // sanitizeBody('status').escape(),
+    // sanitizeBody('dueBack').toDate(),
     
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -81,8 +78,7 @@ exports.bookinstanceCreatePost = [
             Book.find({},'title')
                 .exec(function (err, books) {
                     if (err) { return next(err) }
-                    // Successful, so render.
-                    res.render('bookinstanceForm', { title: 'Create BookInstance', bookList : books, selectedBook : bookinstance.book._id , errors: errors.array(), bookinstance:bookinstance })
+                    res.status(404).json({ title: 'Create BookInstance', bookList : books, selectedBook : bookinstance.book._id , errors: errors.array(), bookinstance:bookinstance })
             })
             return
         }
@@ -100,7 +96,7 @@ exports.bookinstanceCreatePost = [
 
 
 // Display BookInstance delete form on GET.
-exports.bookinstanceDeleteGet = function(req, res, next) {
+export const bookinstanceDeleteGet = function(req, res, next) {
 
     BookInstance.findById(req.params.id)
     .populate('book')
@@ -109,14 +105,13 @@ exports.bookinstanceDeleteGet = function(req, res, next) {
         if (bookinstance==null) { // No results.
             res.redirect('/catalog/bookinstances')
         }
-        // Successful, so render.
-        res.render('bookinstanceDelete', { title: 'Delete BookInstance', bookinstance:  bookinstance})
+        res.status(200).json({ title: 'Delete BookInstance', bookinstance:  bookinstance })
     })
 
 }
 
 // Handle BookInstance delete on POST.
-exports.bookinstanceDeletePost = function(req, res, next) {
+export const bookinstanceDeletePost = function(req, res, next) {
     
     // Assume valid BookInstance id in field.
     BookInstance.findByIdAndRemove(req.body.id, function deleteBookInstance(err) {
@@ -128,7 +123,7 @@ exports.bookinstanceDeletePost = function(req, res, next) {
 }
 
 // Display BookInstance update form on GET.
-exports.bookinstanceUpdateGet = function(req, res, next) {
+export const bookinstanceUpdateGet = function(req, res, next) {
 
     // Get book, authors and genres for form.
     async.parallel({
@@ -147,30 +142,30 @@ exports.bookinstanceUpdateGet = function(req, res, next) {
                 return next(err)
             }
             // Success.
-            res.render('bookinstanceForm', { title: 'Update  BookInstance', bookList : results.books, selectedBook : results.bookinstance.book._id, bookinstance:results.bookinstance })
+            res.status(200).json({ title: 'Update  BookInstance', bookList : results.books, selectedBook : results.bookinstance.book._id, bookinstance:results.bookinstance })
         })
 
 }
 
 // Handle BookInstance update on POST.
-exports.bookinstanceUpdatePost = [
+export const bookinstanceUpdatePost = [
 
     // Validate fields.
-    body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
-    body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
-    body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
+    // body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
+    // body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
+    // body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
     
     // Sanitize fields.
-    sanitizeBody('book').escape(),
-    sanitizeBody('imprint').escape(),
-    sanitizeBody('status').escape(),
-    sanitizeBody('dueBack').toDate(),
+    // sanitizeBody('book').escape(),
+    // sanitizeBody('imprint').escape(),
+    // sanitizeBody('status').escape(),
+    // sanitizeBody('dueBack').toDate(),
     
     // Process request after validation and sanitization.
     (req, res, next) => {
 
         // Extract the validation errors from a request.
-        const errors = validationResult(req)
+        // const errors = validationResult(req)
 
         // Create a BookInstance object with escaped/trimmed data and current id.
         var bookinstance = new BookInstance(
@@ -182,12 +177,10 @@ exports.bookinstanceUpdatePost = [
            })
 
         if (!errors.isEmpty()) {
-            // There are errors so render the form again, passing sanitized values and errors.
             Book.find({},'title')
                 .exec(function (err, books) {
                     if (err) { return next(err) }
-                    // Successful, so render.
-                    res.render('bookinstanceForm', { title: 'Update BookInstance', bookList : books, selectedBook : bookinstance.book._id , errors: errors.array(), bookinstance:bookinstance })
+                    res.status(200).json({ title: 'Update BookInstance', bookList : books, selectedBook : bookinstance.book._id , errors: 'errors', bookinstance:bookinstance })
             })
             return
         }
