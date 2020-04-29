@@ -1,4 +1,5 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import cors from 'cors'
 import { Request, Response } from 'express'
 import contactRouter from './routers/contact'
@@ -12,6 +13,12 @@ const port = process.env.PORT || 3001
 
 app.use(cors())
 app.use(bodyParser.json())
+
+mongoose.connect('mongodb://localhost:27017/testdb', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
 
 // USER MANAGEMENT
 
