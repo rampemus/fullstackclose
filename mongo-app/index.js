@@ -1,4 +1,3 @@
-import coolRouter from './controllers/cool.js'
 import mongoose from 'mongoose'
 import app from './app.js'
 

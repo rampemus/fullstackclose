@@ -1,9 +1,11 @@
 import BookInstance from '../models/bookinstance.js'
 import Book from '../models/book.js'
 import async from 'async'
+import check from 'express-validator'
+import filter from 'express-validator'
 
-// const { body,validationResult } = require('express-validator/check')
-// const { sanitizeBody } = require('express-validator/filter')
+const { body,validationResult } = check
+const { sanitizeBody } = filter
 
 // Display list of all BookInstances.
 export const bookInstanceList = function(req, res, next) {
@@ -11,14 +13,14 @@ export const bookInstanceList = function(req, res, next) {
   BookInstance.find()
     .populate('book')
     .exec(function (err, listBookInstances) {
-      if (err) { return next(err) }
-      res.status(200).json({ title: 'Book Instance List', bookInstanceList:  listBookInstances})
+      if (err) { return next() }
+      res.status(200).json({ title: 'Book Instance List', bookInstanceList: listBookInstances })
     })
 
 }
 
 // Display detail page for a specific BookInstance.
-export const bookinstanceDetail = function(req, res, next) {
+export const bookInstanceDetail = function(req, res, next) {
 
     BookInstance.findById(req.params.id)
     .populate('book')
@@ -46,18 +48,18 @@ export const bookinstanceCreateGet = function(req, res, next) {
 }
 
 // Handle BookInstance create on POST.
-export const bookinstanceCreatePost = [
+export const bookInstanceCreatePost = [
 
     // Validate fields.
-    // body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
-    // body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
-    // body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
+    body('book', 'Book must be specified').isLength({ min: 1 }).trim(),
+    body('imprint', 'Imprint must be specified').isLength({ min: 1 }).trim(),
+    body('dueBack', 'Invalid date').optional({ checkFalsy: true }).isISO8601(),
     
     // Sanitize fields.
-    // sanitizeBody('book').escape(),
-    // sanitizeBody('imprint').escape(),
-    // sanitizeBody('status').escape(),
-    // sanitizeBody('dueBack').toDate(),
+    sanitizeBody('book').escape(),
+    sanitizeBody('imprint').escape(),
+    sanitizeBody('status').escape(),
+    sanitizeBody('dueBack').toDate(),
     
     // Process request after validation and sanitization.
     (req, res, next) => {

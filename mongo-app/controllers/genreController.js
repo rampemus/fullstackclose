@@ -1,9 +1,11 @@
 import Genre from '../models/genre.js'
 import Book from '../models/book.js'
 import async from 'async'
+import check from 'express-validator'
+import filter from 'express-validator'
 
-// const { body, validationResult } = require('express-validator/check')
-// const { sanitizeBody } = require('express-validator/filter')
+const { body, validationResult } = check
+const { sanitizeBody } = filter
 
 // Display list of all Genre.
 export const genreList = function(req, res, next) {
@@ -55,10 +57,10 @@ export const genreCreateGet = function(req, res, next) {
 export const genreCreatePost = [
 
   // Validate that the name field is not empty.
-  // body('name', 'Genre name required').isLength({ min: 1 }).trim(),
+  body('name', 'Genre name required').isLength({ min: 1 }).trim(),
 
   // Sanitize (trim) the name field.
-  //sanitizeBody('name').escape(),
+  sanitizeBody('name').escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -175,10 +177,10 @@ export const genreUpdateGet = function(req, res, next) {
 export const genreUpdatePost = [
    
   // Validate that the name field is not empty.
-  // body('name', 'Genre name required').isLength({ min: 1 }).trim(),
+  body('name', 'Genre name required').isLength({ min: 1 }).trim(),
   
   // Sanitize (escape) the name field.
-  // sanitizeBody('name').escape(),
+  sanitizeBody('name').escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {

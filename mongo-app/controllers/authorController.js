@@ -1,9 +1,11 @@
 import Author from '../models/author.js'
 import async from 'async'
 import Book from '../models/book.js'
+import check from 'express-validator'
+import filter from 'express-validator'
 
-// const { body, validationResult } = require('express-validator/check')
-// const { sanitizeBody } = require('express-validator/filter')
+const { body, validationResult } = check
+const { sanitizeBody } = filter
 
 // Display list of all Authors.
 export const authorList = function (req, res, next) {
@@ -52,18 +54,18 @@ export const authorCreateGet = function (req, res, next) {
 export const authorCreatePost = [
 
   // Validate fields.
-  //  body('firstName').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
-  //    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-  //  body('familyName').isLength({ min: 1 }).trim().withMessage('Family name must be specified.')
-  //    .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-  //  body('dateOfBirth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
-  //  body('dateOfDeath', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
+  body('firstName').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+  body('familyName').isLength({ min: 1 }).trim().withMessage('Family name must be specified.')
+    .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+  body('dateOfBirth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601(),
+  body('dateOfDeath', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601(),
 
   // Sanitize fields.
-  // sanitizeBody('firstName').escape(),
-  // sanitizeBody('familyName').escape(),
-  // sanitizeBody('dateOfBirth').toDate(),
-  // sanitizeBody('dateOfDeath').toDate(),
+  sanitizeBody('firstName').escape(),
+  sanitizeBody('familyName').escape(),
+  sanitizeBody('dateOfBirth').toDate(),
+  sanitizeBody('dateOfDeath').toDate(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
