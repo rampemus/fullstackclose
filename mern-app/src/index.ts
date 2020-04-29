@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { Request, Response } from 'express'
-import contactRouter from './controllers/contactRouter'
+import contactRouter from './routers/contactRouter'
 import bodyParser from 'body-parser'
 import { createToken } from './utils/createToken'
 
@@ -12,8 +12,6 @@ const port = process.env.PORT || 3001
 
 app.use(cors())
 app.use(bodyParser.json())
-
-
 
 // USER MANAGEMENT
 
