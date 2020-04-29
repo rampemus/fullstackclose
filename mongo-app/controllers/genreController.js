@@ -2,24 +2,24 @@ import Genre from '../models/genre.js'
 import Book from '../models/book.js'
 import async from 'async'
 
-const { body, validationResult } = require('express-validator/check')
-const { sanitizeBody } = require('express-validator/filter')
+// const { body, validationResult } = require('express-validator/check')
+// const { sanitizeBody } = require('express-validator/filter')
 
 // Display list of all Genre.
-exports.genreList = function(req, res, next) {
+export const genreList = function(req, res, next) {
 
   Genre.find()
     .sort([['name', 'ascending']])
     .exec(function (err, listGenres) {
       if (err) { return next(err) }
       // Successful, so render.
-      res.render('genreList', { title: 'Genre List', listGenres:  listGenres})
+      res.status(200).json({ title: 'Genre List', listGenres:  listGenres})
     })
 
 }
 
 // Display detail page for a specific Genre.
-exports.genreDetail = function(req, res, next) {
+export const genreDetail = function(req, res, next) {
 
   async.parallel({
     genre: function(callback) {
@@ -41,24 +41,24 @@ exports.genreDetail = function(req, res, next) {
       return next(err)
     }
     // Successful, so render.
-    res.render('genreDetail', { title: 'Genre Detail', genre: results.genre, genreBooks: results.genreBooks } )
+    res.status(200).json({ title: 'Genre Detail', genre: results.genre, genreBooks: results.genreBooks })
   })
 
 }
 
 // Display Genre create form on GET.
-exports.genreCreateGet = function(req, res, next) {
+export const genreCreateGet = function(req, res, next) {
   res.render('genreForm', { title: 'Create Genre'})
 }
 
 // Handle Genre create on POST.
-exports.genreCreatePost = [
+export const genreCreatePost = [
 
   // Validate that the name field is not empty.
-  body('name', 'Genre name required').isLength({ min: 1 }).trim(),
+  // body('name', 'Genre name required').isLength({ min: 1 }).trim(),
 
   // Sanitize (trim) the name field.
-  sanitizeBody('name').escape(),
+  //sanitizeBody('name').escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -74,7 +74,7 @@ exports.genreCreatePost = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render('genreForm', { title: 'Create Genre', genre: genre, errors: errors.array()})
+      res.status(404).json({ title: 'Create Genre', genre: genre, errors: errors.array()})
     return
     }
     else {
@@ -104,7 +104,7 @@ exports.genreCreatePost = [
 ]
 
 // Display Genre delete form on GET.
-exports.genreDeleteGet = function(req, res, next) {
+export const genreDeleteGet = function(req, res, next) {
 
   async.parallel({
     genre: function(callback) {
@@ -119,13 +119,13 @@ exports.genreDeleteGet = function(req, res, next) {
       res.redirect('/catalog/genres')
     }
     // Successful, so render.
-    res.render('genreDelete', { title: 'Delete Genre', genre: results.genre, genreBooks: results.genreBooks } )
+    res.status(200).json({ title: 'Delete Genre', genre: results.genre, genreBooks: results.genreBooks } )
   })
 
 }
 
 // Handle Genre delete on POST.
-exports.genreDeletePost = function(req, res, next) {
+export const genreDeletePost = function(req, res, next) {
 
   async.parallel({
     genre: function(callback) {
@@ -139,7 +139,7 @@ exports.genreDeletePost = function(req, res, next) {
     // Success
     if (results.genreBooks.length > 0) {
       // Genre has books. Render in same way as for GET route.
-      res.render('genreDelete', { title: 'Delete Genre', genre: results.genre, genreBooks: results.genreBooks } )
+      res.status(404).json({ title: 'Delete Genre', genre: results.genre, genreBooks: results.genreBooks } )
       return
     }
     else {
@@ -156,7 +156,7 @@ exports.genreDeletePost = function(req, res, next) {
 }
 
 // Display Genre update form on GET.
-exports.genreUpdateGet = function(req, res, next) {
+export const genreUpdateGet = function(req, res, next) {
 
   Genre.findById(req.params.id, function(err, genre) {
     if (err) { return next(err) }
@@ -166,19 +166,19 @@ exports.genreUpdateGet = function(req, res, next) {
       return next(err)
     }
     // Success.
-    res.render('genreForm', { title: 'Update Genre', genre: genre })
+    res.status(200).json({ title: 'Update Genre', genre: genre })
   })
 
 }
 
 // Handle Genre update on POST.
-exports.genreUpdatePost = [
+export const genreUpdatePost = [
    
   // Validate that the name field is not empty.
-  body('name', 'Genre name required').isLength({ min: 1 }).trim(),
+  // body('name', 'Genre name required').isLength({ min: 1 }).trim(),
   
   // Sanitize (escape) the name field.
-  sanitizeBody('name').escape(),
+  // sanitizeBody('name').escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -197,7 +197,7 @@ exports.genreUpdatePost = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values and error messages.
-      res.render('genreForm', { title: 'Update Genre', genre: genre, errors: errors.array()})
+      res.status(200).json({ title: 'Update Genre', genre: genre, errors: errors.array()})
     return
     }
     else {
