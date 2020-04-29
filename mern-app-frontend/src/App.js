@@ -30,11 +30,17 @@ function App() {
     <div className="App">
       {token 
        ? <div>
-        <ContactList token={token} contacts={contacts} />
+        <ContactList
+          token={token}
+          contacts={contacts}
+          setSelectedContact={setSelectedContact}
+          updateContacts={updateContacts}
+        />
         <ContactForm
           initialValues={selectedContact}
           updateContacts={updateContacts}
           handleCancel={() => setSelectedContact(null)}
+          token={token}
         />
         </div> 
        : <Login handleLogin={handleLogin}/>}

@@ -4,7 +4,7 @@ import { capitalizeFirstLetter } from '../utils/stringHelper'
 
 const ContactList = (props) => {
 
-  const { contacts, updateContacts, setSelectedContact } = props
+  const { contacts, updateContacts, setSelectedContact, token } = props
 
   return(
     <div>
@@ -27,6 +27,7 @@ const ContactList = (props) => {
               contact={contact}
               updateContacts={updateContacts}
               handleSelect={setSelectedContact}
+              token={token}
             />
           )}
         </tbody>

@@ -2,11 +2,10 @@ import React from 'react'
 import { Formik, Field, Form } from 'formik'
 import ContactFieldArray from './ContactFieldArray'
 import contactService from '../services/contact'
-import contact from '../services/contact'
 
 const ContactForm = (props) => {
   
-  const { updateContacts, handleCancel } = props
+  const { updateContacts, handleCancel, token } = props
 
   const initialValues = props.initialValues || {
     firstname: '',
@@ -31,7 +30,7 @@ const ContactForm = (props) => {
         onSubmit={(values, { setSubmitting, setValues })=>{
           setSubmitting(true)
           if (initialValues.id) {
-            contactService.modifyContact({ ...values, id: initialValues.id }).then(response => {
+            contactService.modifyContact({ ...values, id: initialValues.id, token }).then(response => {
               handleCancel && handleCancel()
               updateContacts && updateContacts()
               setSubmitting(false)
@@ -40,7 +39,7 @@ const ContactForm = (props) => {
               setSubmitting(false)
             })
           } else {
-            contactService.createContact(values).then(response => {
+            contactService.createContact(values, token).then(response => {
               setValues(initialValues)
               updateContacts && updateContacts()
               setSubmitting(false)
@@ -53,7 +52,6 @@ const ContactForm = (props) => {
       >
         {({ isSubmitting, values, setValues }) => (
           <Form>
-            {contact.id}
             <div className='contact-form-flexbox'>
               <div className='contact-form-panel'>
                 <p>Firstname: <Field type='text' name='firstname'/></p>

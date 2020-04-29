@@ -3,10 +3,10 @@ import contactService from '../services/contact'
 
 const ContactListRow = (props) => {
 
-  const { contact, updateContacts, handleSelect } = props
+  const { contact, updateContacts, handleSelect, token } = props
 
   const handleRowDelete = () => {
-    contactService.deleteContact(contact).then(response => {
+    contactService.deleteContact(contact, token).then(response => {
       updateContacts()
     })
   }

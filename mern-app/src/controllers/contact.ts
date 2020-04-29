@@ -42,6 +42,8 @@ interface INewContact {
     country: string,
 }
 
+// Controllers
+
 export const contactGet = (request: Request, response: Response) => {
     return response.status(200).json(database)
 }
@@ -51,18 +53,9 @@ interface IPostContactRequest extends Request {
 }
 export const contactPost = (request: IPostContactRequest, response: Response) => {
     const body: INewContact = request.body
-    if (!body
-        || !body.firstname
-        || !body.lastname
-        || !body.nickname
-        || !body.title
-        || !body.phone
-        || !body.mobile
-        || !body.email
-        || !body.street
-        || !body.postcode
-        || !body.city
-        || !body.country
+    if (!body || !body.firstname || !body.lastname || !body.nickname || !body.title
+        || !body.phone || !body.mobile || !body.email || !body.street || !body.postcode
+        || !body.city || !body.country
     ) {
         return response.status(422).json({ message: 'provide required data' })
     }
@@ -80,7 +73,7 @@ export const contactPost = (request: IPostContactRequest, response: Response) =>
         city: body.city,
         country: body.country,
     }
-    database.push(contact)
+    database.push(contact) // TODO: replace with mongoDB
     return response.status(200).json({ message: 'success !!' })
 }
 
@@ -89,12 +82,12 @@ interface IPutContactRequest extends Request {
 }
 export const contactPut = (request: IPutContactRequest, response: Response) => {
     const body: IContact = request.body
-    database.splice(database.findIndex(contact => contact.id === body.id), 1, body)
+    database.splice(database.findIndex(contact => contact.id === body.id), 1, body) // TODO: replace with mongoDB
     return response.status(200).json({ message: 'success !!' })
 }
 
 export const contactDelete = (request: Request, response: Response) => {
     const tempid = request.params.id
-    database.splice(database.findIndex(contact => contact.id === tempid), 1)
+    database.splice(database.findIndex(contact => contact.id === tempid), 1) // TODO: replace with mongoDB
     return response.status(204).json({ message: 'not found' })
 }

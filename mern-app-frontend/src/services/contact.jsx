@@ -1,29 +1,30 @@
 import axios from 'axios'
 const baseUrl = '/api/contact'
 
+const config = (token) => {
+  return { headers: {
+    'Content-Type': 'application/json',
+    'token': token ? token.toString() : ''
+  }}
+}
+
 const getAll = (token) => {
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'token': token ? token.toString() : ''
-    }
-  }
-  const request = axios.get(baseUrl, config )
+  const request = axios.get(baseUrl, config(token) )
   return request.then(response => response.data)
 }
 
-const createContact = (contact) => {
-  const request = axios.post(baseUrl, contact)
+const createContact = (contact, token) => {
+  const request = axios.post(baseUrl, contact, config(token))
   return request.then(response => response.data)
 }
 
-const modifyContact = (contact) => {
-  const request = axios.put(baseUrl, contact)
+const modifyContact = (contact, token) => {
+  const request = axios.put(baseUrl, contact, config(token))
   return request.then(response => response.data)
 }
 
-const deleteContact = (contact) => {
-  const request = axios.delete(`${baseUrl}/${contact.id}`)
+const deleteContact = (contact, token) => {
+  const request = axios.delete(`${baseUrl}/${contact.id}`, config(token))
   return request.then(response => response.data)
 }
 
