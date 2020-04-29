@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { Request, Response } from 'express'
-import contactRouter from './routers/contactRouter'
+import contactRouter from './routers/contact'
 import bodyParser from 'body-parser'
 import { createToken } from './utils/createToken'
 

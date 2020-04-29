@@ -95,6 +95,6 @@ export const contactPut = (request: IPutContactRequest, response: Response) => {
 
 export const contactDelete = (request: Request, response: Response) => {
     const tempid = request.params.id
-    const deletedContact = database.splice(database.findIndex(contact => contact.id === tempid), 1)
+    database.splice(database.findIndex(contact => contact.id === tempid), 1)
     return response.status(204).json({ message: 'not found' })
 }
