@@ -42,8 +42,8 @@ function App() {
           handleCancel={() => setSelectedContact(null)}
           token={token}
         />
-        </div> 
-       : <Login handleLogin={handleLogin}/>}
+      </div> 
+      : <Login handleLogin={handleLogin}/>}
       
     </div>
   )
