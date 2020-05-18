@@ -1,5 +1,10 @@
 import { Router } from 'express'
-import { contactPost, contactGet, contactPut, contactDelete } from '../controllers/contact'
+import {
+  contactPost,
+  contactGet,
+  contactPut,
+  contactDelete
+} from '../controllers/contact'
 
 const contactRouter = Router()
 
